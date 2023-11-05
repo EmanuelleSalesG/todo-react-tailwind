@@ -13,10 +13,15 @@ const Page = () => {
   ]);
 
   const handleAddButton = () => {
+    if(itemInput.trim() === '') return;
     setList([
       ...list, {label: itemInput, checked: false}
     ]);
     setItemInput('');
+  }
+
+  const deleteItem = (index: number) => {
+    setList(list.filter((item, key) => key !== index));
   }
 
   return (
@@ -32,15 +37,17 @@ const Page = () => {
           <button onClick={handleAddButton} className="text-4xl">+</button>
       </div>
 
-      <div>
-        <p className="border border-white p-2 rounded-md m-2">{list.length} tasks listed</p>
-      </div>
+      { (list.length > 1) &&
+        <div>
+          <p className="border border-white p-2 rounded-md m-2">{list.length} tasks listed</p>
+        </div>
+      }
 
       <ul className="w-full max-w-lg pl-5">
-          {list.map(item => (
+          {list.map((item, index) => (
             <>
-              <li className="p-2 flex justify-between">{item.label} 
-              <button className="bg-blue-800  rounded-full px-2 text-xl mr-2 hover:opacity-80">Close</button>
+              <li key={index} className="p-2 flex justify-between">{item.label}       
+              <button onClick={() => deleteItem(index)} className="bg-blue-800 ml-2  rounded-full px-2 text-xl mr-2 hover:opacity-80">Close</button> 
               </li>
               <hr />
             </> 
