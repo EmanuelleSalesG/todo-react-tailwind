@@ -8,25 +8,29 @@ const Page = () => {
   const [itemInput, setItemInput] = useState('');
 
   const [list, setList] = useState<TodoItem[]>([
-    {label: 'Test', checked: false},
-    {label: 'Test', checked: true}
+    
   ]);
 
   const handleAddButton = () => {
     if(itemInput.trim() === '') return;
     setList([
-      ...list, {label: itemInput, checked: false}
+      ...list, {id: list.length + 1, label: itemInput, checked: false}
     ]);
     setItemInput('');
   }
 
-  const deleteItem = (index: number) => {
-    setList(list.filter((item, key) => key !== index));
+  const deleteItem = (id: number) => {
+    setList(list.filter((item) => item.id !== id));
   }
 
-  const toggleItem = (index: number) => {
+  const toggleItem = (id: number) => {
       let newList = [...list];
-      newList[index].checked = !newList[index].checked;
+
+      for(let i in newList){
+        if(newList[i].id === id){
+          newList[i].checked = !newList[i].checked;
+        }
+      }
       setList(newList);
   }
 
@@ -50,14 +54,14 @@ const Page = () => {
       }
 
       <ul className="w-full max-w-lg pl-5">
-          {list.map((item, index) => (
+          {list.map((item) => (
             <>
-              <li key={index} className="p-2 flex justify-between">
+              <li key={item.id} className="p-2 flex justify-between">
               <div>
-                <input onClick={() => toggleItem(index)} className="mr-2 w-5 h-5" type="checkbox" checked={item.checked} />  
+                <input onClick={() => toggleItem(item.id)} className="mr-2 w-5 h-5" type="checkbox" checked={item.checked} />  
                 {item.label}
               </div>       
-              <button onClick={() => deleteItem(index)} className="bg-blue-800 ml-2  rounded-full px-2 text-xl mr-2 hover:opacity-80">Close</button> 
+              <button onClick={() => deleteItem(item.id)} className="bg-blue-800 ml-2  rounded-full px-2 text-xl mr-2 hover:opacity-80">Close</button> 
               </li>
               <hr />
             </> 
